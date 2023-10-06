@@ -1,0 +1,18 @@
+{
+    "name": "matheus/comex-levelup",
+    "description": "Projeto do programa LevelUp",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Matheus\\ComexLevelup\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Matheus Dresch",
+            "email": "matheus.dresch02@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
