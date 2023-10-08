@@ -39,3 +39,18 @@ function repoeProduto(int $idProduto,  int $quantidade, array &$produtos)
 
 compraProduto(0, $produtos);
 repoeProduto(0, 10, $produtos);
+
+function produtoMaisCaro(array $produtos)
+{
+    $maisCaro = 0;
+
+    foreach ($produtos as $indice => $produto) {
+        if ($produto['preco'] > $produtos[$maisCaro]['preco']) {
+            $maisCaro = $indice;
+        }
+    }
+
+    echo "O produto mais caro é " . $produtos[$maisCaro]['nome'] . ", custando R$" . $produtos[$maisCaro]['preco'] . PHP_EOL;
+};
+
+produtoMaisCaro($produtos);
