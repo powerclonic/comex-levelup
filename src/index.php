@@ -1,56 +1,104 @@
 <?php
+class Produto
+{
+    public function __construct(
+        private string $nome,
+        private float $preco,
+        private int $qtdEstoque
+    ) {
+    }
+
+    //? getters
+
+    public function getNome()
+    {
+        return $this->nome;
+    }
+
+    public function getPreco()
+    {
+        return $this->preco;
+    }
+
+    public function getQtdEstoque()
+    {
+        return $this->qtdEstoque;
+    }
+
+    //? setters
+
+    public function setNome(string $valor)
+    {
+        $this->nome = $valor;
+    }
+
+    public function setPreco(float $valor)
+    {
+        $this->preco = $valor;
+    }
+
+    public function compra(int $qtd = 1)
+    {
+        $this->qtdEstoque -= $qtd;
+    }
+
+    public function repoe(int $qtd = 1)
+    {
+        $this->qtdEstoque += $qtd;
+    }
+}
+
+$produto1 = new Produto(
+    'Caneta',
+    1.99,
+    500
+);
+
+$produto2 = new Produto(
+    'Caderno',
+    24.99,
+    400
+);
+
+$produto3 = new Produto(
+    'Processador',
+    249.99,
+    100
+);
+
+$produto4 = new Produto(
+    'Placa de Vídeo',
+    1399.99,
+    20
+);
 
 $produtos = [
-    [ // 0
-        'nome' => 'Caneta',
-        'preco' => 1.99,
-        'qtd_estoque' => 250
-    ],
-    [ // 1
-        'nome' => 'Caderno',
-        'preco' => 24.99,
-        'qtd_estoque' => 100
-    ],
-    [ // 2
-        'nome' => 'Processador',
-        'preco' => 249.99,
-        'qtd_estoque' => 70
-    ],
-    [ // 3
-        'nome' => 'Placa de vídeo',
-        'preco' => 1399.99,
-        'qtd_estoque' => 15
-    ]
+    $produto1,
+    $produto2,
+    $produto3,
+    $produto4
 ];
 
 foreach ($produtos as $produto) {
-    echo "O produto " . $produto['nome'] . " custa R$" . $produto['preco'] . " e possui " . $produto['qtd_estoque'] . " item(s) em estoque." . PHP_EOL;
+    echo "O produto " . $produto->getNome() . " custa R$" . $produto->getPreco() . " e possui " . $produto->getQtdEstoque() . " item(s) em estoque." . PHP_EOL;
 };
 
-function compraProduto(int $idProduto, array &$produtos)
-{
-    $produtos[$idProduto]['qtd_estoque'] -= 1;
-}
+$produto1->compra(3);
+$produto1->repoe(10);
 
-function repoeProduto(int $idProduto,  int $quantidade, array &$produtos)
-{
-    $produtos[$idProduto]['qtd_estoque'] += $quantidade;
-}
-
-compraProduto(0, $produtos);
-repoeProduto(0, 10, $produtos);
+echo $produto1->getQtdEstoque() . PHP_EOL;
 
 function produtoMaisCaro(array $produtos)
 {
-    $maisCaro = 0;
+    $maisCaro = $produtos[0];
 
-    foreach ($produtos as $indice => $produto) {
-        if ($produto['preco'] > $produtos[$maisCaro]['preco']) {
-            $maisCaro = $indice;
+    foreach ($produtos as $produto) {
+        if ($produto->getPreco() > $maisCaro->getPreco()) {
+            $maisCaro = $produto;
         }
     }
 
-    echo "O produto mais caro é " . $produtos[$maisCaro]['nome'] . ", custando R$" . $produtos[$maisCaro]['preco'] . PHP_EOL;
+    echo "O produto mais caro é " . $maisCaro->getNome() . ", custando R$" . $maisCaro->getPreco() . PHP_EOL;
 };
 
 produtoMaisCaro($produtos);
