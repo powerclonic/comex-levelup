@@ -54,3 +54,17 @@ function produtoMaisCaro(array $produtos)
 };
 
 produtoMaisCaro($produtos);
+
+$cliente = [
+    'nome' => 'Fulano de Tal',
+    'email' => 'fulano@foo.baz',
+    'celular' => 54999887766,
+    'endereco' => [
+        'cep' => '95150000',
+        'estado' => 'RS',
+        'cidade' => 'Nova Petrópolis',
+        'bairro' => 'Centro',
+        'rua' => 'Avenida Ciclano',
+        'numero' => 987
+    ]
+];
