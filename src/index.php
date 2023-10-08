@@ -68,3 +68,18 @@ $cliente = [
         'numero' => 987
     ]
 ];
+
+function calculaDesconto(float $valorTotal)
+{
+    if ($valorTotal < 100) return $valorTotal;
+
+    return number_format($valorTotal * 0.9, 2);
+}
+
+$valorTotal = 249.99 + 1.99;
+
+echo "Calculando desconto para o pedido com o valor de: R$" . $valorTotal . PHP_EOL;
+
+$valorFinal = calculaDesconto($valorTotal);
+
+echo "Valor com desconto: R$" . $valorFinal . PHP_EOL;
