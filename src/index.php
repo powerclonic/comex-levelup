@@ -55,20 +55,6 @@ function produtoMaisCaro(array $produtos)
 
 produtoMaisCaro($produtos);
 
-$cliente = [
-    'nome' => 'Fulano de Tal',
-    'email' => 'fulano@foo.baz',
-    'celular' => 54999887766,
-    'endereco' => [
-        'cep' => '95150000',
-        'estado' => 'RS',
-        'cidade' => 'Nova Petrópolis',
-        'bairro' => 'Centro',
-        'rua' => 'Avenida Ciclano',
-        'numero' => 987
-    ]
-];
-
 function calculaDesconto(float $valorTotal)
 {
     if ($valorTotal < 100) return $valorTotal;
@@ -83,3 +69,76 @@ echo "Calculando desconto para o pedido com o valor de: R$" . $valorTotal . PHP_
 $valorFinal = calculaDesconto($valorTotal);
 
 echo "Valor com desconto: R$" . $valorFinal . PHP_EOL;
+
+class Cliente
+{
+    public function __construct(
+        private string $nome,
+        private string $email,
+        private int $celular,
+        private array $endereco,
+    ) {
+    }
+
+    //? getters
+
+    public function getNome()
+    {
+        return $this->nome;
+    }
+
+    public function getCelular()
+    {
+        return $this->celular;
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    public function getEndereco()
+    {
+        return $this->endereco;
+    }
+
+    //? setters
+
+    public function setNome(string $valor)
+    {
+
+        $this->nome = $valor;
+    }
+
+    public function setCelular(int $valor)
+    {
+
+        $this->celular = $valor;
+    }
+
+    public function setEmail(string $valor)
+    {
+
+        $this->email = $valor;
+    }
+
+    public function setEndereco(array $valor)
+    {
+
+        $this->endereco = $valor;
+    }
+}
+
+$cliente = new Cliente(
+    'Fulano de Tal',
+    'fulano@foo.baz',
+    54999886677,
+    [
+        'cep' => '95150000',
+        'estado' => 'RS',
+        'cidade' => 'Nova Petrópolis',
+        'bairro' => 'Centro',
+        'rua' => 'Avenida Ciclano',
+        'numero' => 987
+    ]
+);
