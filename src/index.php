@@ -120,6 +120,8 @@ echo "Valor com desconto: R$" . $valorFinal . PHP_EOL;
 
 class Cliente
 {
+    private array $pedidos = [];
+
     public function __construct(
         private string $nome,
         private string $email,
@@ -150,6 +152,11 @@ class Cliente
         return $this->endereco;
     }
 
+    public function getPedidos()
+    {
+        return $this->pedidos;
+    }
+
     //? setters
 
     public function setNome(string $valor)
@@ -174,6 +181,11 @@ class Cliente
     {
 
         $this->endereco = $valor;
+    }
+
+    public function adicionaPedido(Pedido $pedido)
+    {
+        array_push($this->pedidos, $pedido);
     }
 }
 
@@ -252,3 +264,10 @@ class Pedido
 $pedido = new Pedido(1, $cliente, $produtos);
 
 echo "O pedido de ID " . $pedido->getId() . " custa no total R$" . $pedido->getValorTotal() . PHP_EOL;
+
+$cliente->adicionaPedido($pedido);
+$cliente->adicionaPedido($pedido);
+$cliente->adicionaPedido($pedido);
+$cliente->adicionaPedido($pedido);
+
+echo "O cliente " . $cliente->getNome() . " tem " . count($cliente->getPedidos()) . " pedido(s)" . PHP_EOL;
