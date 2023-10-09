@@ -6,12 +6,42 @@ use Matheus\Comex\Classes\Cliente;
 use Matheus\Comex\Classes\Pagamento\Pix;
 use Matheus\Comex\Classes\Pedido;
 use Matheus\Comex\Classes\Produto;
+use Matheus\Comex\Interfaces\MeioDePagamento;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
+class PagamentoMock implements MeioDePagamento
+{
+    public function processaPagamento(): bool
+    {
+        return true;
+    }
+}
+
 class PedidoTest extends TestCase
 {
+    private Cliente $cliente;
+
+    public function __construct(string $name)
+    {
+        $this->cliente = new Cliente(
+            'Fulano de Tal',
+            'fulano@foo.baz',
+            54999886677,
+            [
+                'cep' => '95150000',
+                'estado' => 'RS',
+                'cidade' => 'Nova Petrópolis',
+                'bairro' => 'Centro',
+                'rua' => 'Avenida Ciclano',
+                'numero' => 987
+            ]
+        );
+
+        parent::__construct($name);
+    }
+
     #[Test]
     #[DataProvider('entregaProdutos')]
     public function testValorTotalDoPedidoCalculadoCorretamente(array $produtos)
@@ -43,6 +73,19 @@ class PedidoTest extends TestCase
             $valorEsperado,
             $pedido->getValorTotal(),
         );
+    }
+
+    public function testEhPossivelProcessarPagamentoDoPedido()
+    {
+        $pedido = new Pedido(
+            1,
+            $this->cliente,
+            [],
+            new PagamentoMock()
+        );
+
+        $staus = $pedido->getMeioDePagamento()->processaPagamento();
+        $this->assertTrue($staus);
     }
 
     public static function listaDeProdutosPrecoFloat()
