@@ -39,11 +39,23 @@ class Produto
 
     public function compra(int $qtd = 1)
     {
+        if ($qtd <= 0) {
+            throw new InvalidArgumentException("A quantidade de compra deve ser um número inteiro positivo maior do que 0.");
+        }
+
+        if (($this->qtdEstoque - $qtd) < 0) {
+            throw new InvalidArgumentException("A quantidade de compra excede o limite de produtos em estoque");
+        }
+
         $this->qtdEstoque -= $qtd;
     }
 
     public function repoe(int $qtd = 1)
     {
+        if ($qtd <= 0) {
+            throw new InvalidArgumentException("A quantidade de reposição deve ser um número inteiro positivo maior do que 0.");
+        }
+
         $this->qtdEstoque += $qtd;
     }
 }
@@ -84,7 +96,7 @@ foreach ($produtos as $produto) {
 };
 
 $produto1->compra(3);
-$produto1->repoe(10);
+$produto1->repoe(2);
 
 echo $produto1->getQtdEstoque() . PHP_EOL;
 
