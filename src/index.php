@@ -4,6 +4,9 @@ require_once __DIR__ . "/../vendor/autoload.php";
 
 use Matheus\Comex\Classes\Carrinho;
 use Matheus\Comex\Classes\Cliente;
+use Matheus\Comex\Classes\Exceptions\EstoqueNegativo;
+use Matheus\Comex\Classes\Exceptions\ProdutoNaoExisteNoCarrinho;
+use Matheus\Comex\Classes\Exceptions\QuantidadeNegativaInformada;
 use Matheus\Comex\Classes\Pedido;
 use Matheus\Comex\Classes\Produto;
 use Matheus\Comex\Classes\Pagamento\Pix;
@@ -46,8 +49,14 @@ foreach ($produtos as $produto) {
 try {
     $produto1->compra(3);
     $produto1->repoe(2);
-} catch (\InvalidArgumentException $erro) {
-    echo "Argumento inválido passado para função! Erro: " . $erro->getMessage();
+} catch (QuantidadeNegativaInformada $erro) {
+    echo "Erro ao adicionar/remover produtos do estoque! Erro: " . $erro->getMessage() . PHP_EOL;
+    return;
+} catch (EstoqueNegativo $erro) {
+    echo "Erro ao adicionar/remover produtos do estoque! Erro: " . $erro->getMessage() . PHP_EOL;
+    return;
+} catch (\Throwable) {
+    echo "Erro inesperado ao adicionar/remover produtos do estoque! Erro: " . $erro->getMessage() . PHP_EOL;
     return;
 }
 
@@ -126,8 +135,11 @@ $carrinho->listaProdutos();
 try {
     $carrinho->removeProduto(0);
     $carrinho->removeProduto(29);
-} catch (OutOfBoundsException $erro) {
+} catch (ProdutoNaoExisteNoCarrinho $erro) {
     echo "Índice informado não existe no carrinho! Erro: " . $erro->getMessage() . PHP_EOL;
+    return;
+} catch (\Throwable $erro) {
+    echo "Erro inesperado ao remover produto do carrinho! Erro: " . $erro->getMessage() . PHP_EOL;
     return;
 }
 

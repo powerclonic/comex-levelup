@@ -2,6 +2,9 @@
 
 namespace Matheus\Comex\Classes;
 
+use Matheus\Comex\Classes\Exceptions\EstoqueNegativo;
+use Matheus\Comex\Classes\Exceptions\QuantidadeNegativaInformada;
+
 class Produto
 {
     public function __construct(
@@ -43,11 +46,11 @@ class Produto
     public function compra(int $qtd = 1)
     {
         if ($qtd <= 0) {
-            throw new \InvalidArgumentException("A quantidade de compra deve ser um número inteiro positivo maior do que 0.");
+            throw new QuantidadeNegativaInformada();
         }
 
         if (($this->qtdEstoque - $qtd) < 0) {
-            throw new \InvalidArgumentException("A quantidade de compra excede o limite de produtos em estoque");
+            throw new EstoqueNegativo();
         }
 
         $this->qtdEstoque -= $qtd;
@@ -56,7 +59,7 @@ class Produto
     public function repoe(int $qtd = 1)
     {
         if ($qtd <= 0) {
-            throw new \InvalidArgumentException("A quantidade de reposição deve ser um número inteiro positivo maior do que 0.");
+            throw new QuantidadeNegativaInformada();
         }
 
         $this->qtdEstoque += $qtd;

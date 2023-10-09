@@ -2,6 +2,8 @@
 
 namespace Matheus\Comex\Classes;
 
+use Matheus\Comex\Classes\Exceptions\ProdutoNaoExisteNoCarrinho;
+
 class Carrinho
 {
     private array $produtos = [];
@@ -14,7 +16,7 @@ class Carrinho
     public function removeProduto(int $indice)
     {
         if (!key_exists($indice, $this->produtos)) {
-            throw new \OutOfBoundsException("O índice " . $indice . " não existe no carrinho");
+            throw new ProdutoNaoExisteNoCarrinho($indice);
         }
 
         array_splice($this->produtos, $indice, 1);
