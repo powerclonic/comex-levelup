@@ -95,8 +95,13 @@ foreach ($produtos as $produto) {
     echo "O produto " . $produto->getNome() . " custa R$" . $produto->getPreco() . " e possui " . $produto->getQtdEstoque() . " item(s) em estoque." . PHP_EOL;
 };
 
-$produto1->compra(3);
-$produto1->repoe(2);
+try {
+    $produto1->compra(3);
+    $produto1->repoe(2);
+} catch (\InvalidArgumentException $erro) {
+    echo "Argumento inválido passado para função! Erro: " . $erro->getMessage();
+    return;
+}
 
 echo $produto1->getQtdEstoque() . PHP_EOL;
 
@@ -302,6 +307,10 @@ class Carrinho
 
     public function removeProduto(int $indice)
     {
+        if (!key_exists($indice, $this->produtos)) {
+            throw new OutOfBoundsException("O índice " . $indice . " não existe no carrinho");
+        }
+
         array_splice($this->produtos, $indice, 1);
     }
 
@@ -325,7 +334,12 @@ $carrinho->adicionaProduto($produto3);
 
 $carrinho->listaProdutos();
 
-$carrinho->removeProduto(0);
-$carrinho->removeProduto(3);
+try {
+    $carrinho->removeProduto(0);
+    $carrinho->removeProduto(29);
+} catch (OutOfBoundsException $erro) {
+    echo "Índice informado não existe no carrinho! Erro: " . $erro->getMessage() . PHP_EOL;
+    return;
+}
 
 $carrinho->listaProdutos();
