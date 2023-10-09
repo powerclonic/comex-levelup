@@ -1,64 +1,11 @@
 <?php
-class Produto
-{
-    public function __construct(
-        private string $nome,
-        private float $preco,
-        private int $qtdEstoque
-    ) {
-    }
 
-    //? getters
+require_once __DIR__ . "/../vendor/autoload.php";
 
-    public function getNome()
-    {
-        return $this->nome;
-    }
-
-    public function getPreco()
-    {
-        return $this->preco;
-    }
-
-    public function getQtdEstoque()
-    {
-        return $this->qtdEstoque;
-    }
-
-    //? setters
-
-    public function setNome(string $valor)
-    {
-        $this->nome = $valor;
-    }
-
-    public function setPreco(float $valor)
-    {
-        $this->preco = $valor;
-    }
-
-    public function compra(int $qtd = 1)
-    {
-        if ($qtd <= 0) {
-            throw new InvalidArgumentException("A quantidade de compra deve ser um número inteiro positivo maior do que 0.");
-        }
-
-        if (($this->qtdEstoque - $qtd) < 0) {
-            throw new InvalidArgumentException("A quantidade de compra excede o limite de produtos em estoque");
-        }
-
-        $this->qtdEstoque -= $qtd;
-    }
-
-    public function repoe(int $qtd = 1)
-    {
-        if ($qtd <= 0) {
-            throw new InvalidArgumentException("A quantidade de reposição deve ser um número inteiro positivo maior do que 0.");
-        }
-
-        $this->qtdEstoque += $qtd;
-    }
-}
+use Matheus\Comex\Classes\Carrinho;
+use Matheus\Comex\Classes\Cliente;
+use Matheus\Comex\Classes\Pedido;
+use Matheus\Comex\Classes\Produto;
 
 $produto1 = new Produto(
     'Caneta',
@@ -135,82 +82,6 @@ $valorFinal = calculaDesconto($valorTotal);
 
 echo "Valor com desconto: R$" . $valorFinal . PHP_EOL;
 
-class Cliente
-{
-    private array $pedidos = [];
-
-    public function __construct(
-        private string $nome,
-        private string $email,
-        private int $celular,
-        private array $endereco,
-    ) {
-    }
-
-    //? getters
-
-    public function getNome()
-    {
-        return $this->nome;
-    }
-
-    public function getCelular()
-    {
-        return $this->celular;
-    }
-
-    public function getCelularFormatado()
-    {
-        return preg_replace("/(\d{2})(\d{4,5})(\d{4})/", "($1) $2-$3", $this->celular);
-    }
-
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    public function getEndereco()
-    {
-        return $this->endereco;
-    }
-
-    public function getPedidos()
-    {
-        return $this->pedidos;
-    }
-
-    //? setters
-
-    public function setNome(string $valor)
-    {
-
-        $this->nome = $valor;
-    }
-
-    public function setCelular(int $valor)
-    {
-
-        $this->celular = $valor;
-    }
-
-    public function setEmail(string $valor)
-    {
-
-        $this->email = $valor;
-    }
-
-    public function setEndereco(array $valor)
-    {
-
-        $this->endereco = $valor;
-    }
-
-    public function adicionaPedido(Pedido $pedido)
-    {
-        array_push($this->pedidos, $pedido);
-    }
-}
-
 $cliente = new Cliente(
     'Fulano de Tal',
     'fulano@foo.baz',
@@ -227,64 +98,6 @@ $cliente = new Cliente(
 
 echo $cliente->getCelularFormatado() . PHP_EOL;
 
-class Pedido
-{
-    public function __construct(
-        private int $id,
-        private Cliente $cliente,
-        private array $produtos,
-    ) {
-    }
-
-    //? getters
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function getCliente()
-    {
-        return $this->cliente;
-    }
-
-    public function getProdutos()
-    {
-        return $this->produtos;
-    }
-
-    public function getValorTotal()
-    {
-        return $this->calculaDesconto(array_reduce($this->produtos, fn ($carry, $current) => $carry += $current->getPreco()));
-    }
-
-    //? setters
-
-    public function setId(int $valor)
-    {
-        $this->id = $valor;
-    }
-
-    public function setCliente(Cliente $valor)
-    {
-        $this->cliente = $valor;
-    }
-
-    public function setProdutos(array $valor)
-    {
-        $this->produtos = $valor;
-    }
-
-    //? outros métodos
-
-    private function calculaDesconto(float $valorTotal)
-    {
-        if ($valorTotal < 100) return $valorTotal;
-
-        return number_format($valorTotal * 0.9, 2, ',', '.');
-    }
-}
-
 $pedido = new Pedido(1, $cliente, $produtos);
 
 echo "O pedido de ID " . $pedido->getId() . " custa no total R$" . $pedido->getValorTotal() . PHP_EOL;
@@ -295,33 +108,6 @@ $cliente->adicionaPedido($pedido);
 $cliente->adicionaPedido($pedido);
 
 echo "O cliente " . $cliente->getNome() . " tem " . count($cliente->getPedidos()) . " pedido(s)" . PHP_EOL;
-
-class Carrinho
-{
-    private array $produtos = [];
-
-    public function adicionaProduto(Produto $produto)
-    {
-        array_push($this->produtos, $produto);
-    }
-
-    public function removeProduto(int $indice)
-    {
-        if (!key_exists($indice, $this->produtos)) {
-            throw new OutOfBoundsException("O índice " . $indice . " não existe no carrinho");
-        }
-
-        array_splice($this->produtos, $indice, 1);
-    }
-
-    public function listaProdutos()
-    {
-        echo "Produtos no carrinho: " . PHP_EOL;
-        foreach ($this->produtos as $indice => $item) {
-            echo "Produto índice " . $indice . ": " . $item->getNome() . PHP_EOL;
-        }
-    }
-}
 
 $carrinho = new Carrinho();
 
