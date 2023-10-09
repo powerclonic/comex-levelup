@@ -6,6 +6,7 @@ use Matheus\Comex\Classes\Carrinho;
 use Matheus\Comex\Classes\Cliente;
 use Matheus\Comex\Classes\Pedido;
 use Matheus\Comex\Classes\Produto;
+use Matheus\Comex\Classes\Pagamento\Pix;
 
 $produto1 = new Produto(
     'Caneta',
@@ -98,7 +99,9 @@ $cliente = new Cliente(
 
 echo $cliente->getCelularFormatado() . PHP_EOL;
 
-$pedido = new Pedido(1, $cliente, $produtos);
+$pedido = new Pedido(1, $cliente, $produtos, new Pix());
+
+$pedido->getMeioDePagamento()->processaPagamento();
 
 echo "O pedido de ID " . $pedido->getId() . " custa no total R$" . $pedido->getValorTotal() . PHP_EOL;
 

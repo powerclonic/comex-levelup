@@ -2,12 +2,15 @@
 
 namespace Matheus\Comex\Classes;
 
+use Matheus\Comex\Interfaces\MeioDePagamento;
+
 class Pedido
 {
     public function __construct(
         private int $id,
         private Cliente $cliente,
         private array $produtos,
+        private MeioDePagamento $meioDePagamento
     ) {
     }
 
@@ -31,6 +34,11 @@ class Pedido
     public function getValorTotal()
     {
         return $this->calculaDesconto(array_reduce($this->produtos, fn ($carry, $current) => $carry += $current->getPreco()));
+    }
+
+    public function getMeioDePagamento()
+    {
+        return $this->meioDePagamento;
     }
 
     //? setters
