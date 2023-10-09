@@ -271,3 +271,42 @@ $cliente->adicionaPedido($pedido);
 $cliente->adicionaPedido($pedido);
 
 echo "O cliente " . $cliente->getNome() . " tem " . count($cliente->getPedidos()) . " pedido(s)" . PHP_EOL;
+
+class Carrinho
+{
+    private array $produtos = [];
+
+    public function adicionaProduto(Produto $produto)
+    {
+        array_push($this->produtos, $produto);
+    }
+
+    public function removeProduto(int $indice)
+    {
+        array_splice($this->produtos, $indice, 1);
+    }
+
+    public function listaProdutos()
+    {
+        echo "Produtos no carrinho: " . PHP_EOL;
+        foreach ($this->produtos as $indice => $item) {
+            echo "Produto índice " . $indice . ": " . $item->getNome() . PHP_EOL;
+        }
+    }
+}
+
+$carrinho = new Carrinho();
+
+$carrinho->adicionaProduto($produto1);
+$carrinho->adicionaProduto($produto4);
+$carrinho->adicionaProduto($produto2);
+$carrinho->adicionaProduto($produto4);
+$carrinho->adicionaProduto($produto2);
+$carrinho->adicionaProduto($produto3);
+
+$carrinho->listaProdutos();
+
+$carrinho->removeProduto(0);
+$carrinho->removeProduto(3);
+
+$carrinho->listaProdutos();
