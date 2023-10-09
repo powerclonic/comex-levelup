@@ -142,6 +142,11 @@ class Cliente
         return $this->celular;
     }
 
+    public function getCelularFormatado()
+    {
+        return preg_replace("/(\d{2})(\d{4,5})(\d{4})/", "($1) $2-$3", $this->celular);
+    }
+
     public function getEmail()
     {
         return $this->email;
@@ -202,6 +207,8 @@ $cliente = new Cliente(
         'numero' => 987
     ]
 );
+
+echo $cliente->getCelularFormatado() . PHP_EOL;
 
 class Pedido
 {
